@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% block content %}
+	<h1>Links Page</h1>
+	
+	{% if current_user.is_authenticated %}
+
+		<legend class="border-bottom mb-4">Latest Special Links:</legend>
+		<table style="width: 100%;">
+		<tr>
+			<th>Target:</th>
+		    <th>Shortlink:</th>
+	  	</tr>
+  		
+  		{% for link in speciallinks %}
+		<tr>
+			<td><a href="{{ link[1] | b64decode }}" target=_blank>{{ link[1] | b64decode }} </a></td>
+			<td><a href="{{ link[1] | b64decode }}" target=_blank>linkshortener.domain/{{ link[0] | tobase62 }} </a></td>
+		</tr>
+		{% endfor %}
+		</table>
+		
+		<br>
+		<legend class="border-bottom mb-4">Latest Random Links:</legend>
+		<table style="width: 100%;">
+		<tr>
+			<th>Target:</th>
+		    <th>Shortlink:</th>
+	  	</tr>
+
+		{% for link in links %}
+
+		<tr>
+			<td><a href="{{ link[1] | b64decode }}" target=_blank>{{ link[1] | b64decode}} </a></td>
+			<td><a href="{{ link[1] | b64decode }}" target=_blank>linkshortener.domain/{{ link[0] | tobase62  }} </a></td>
+		</tr>
+
+		{% endfor %}
+		</table><br>
+
+	{% else %}
+	
+		<label class="text-danger">You are not logged in, to see special links please <p class="font-weight-bold"><a class="text-danger" href="{{ url_for('users.login') }}">Login!</a></p></label>
+		<legend class="border-bottom mb-4">Latest Random Links:</legend>
+		<table style="width: 100%;">
+		<tr>
+			<th>Target:</th>
+		    <th>Shortlink:</th>
+	  	</tr>
+
+		{% for link in links %}
+		
+		<tr>
+			<td><a href="{{ link[1] | b64decode }}" target=_blank>{{ link[1] | b64decode }} </a></td>
+			<td><a href="{{ link[1] | b64decode }}" target=_blank>linkshortener.domain/{{ link[0] | tobase62  }} </a></td>
+		</tr>
+
+		{% endfor %}
+	
+		</table><br>
+	
+	{% endif %}
+{% endblock%}

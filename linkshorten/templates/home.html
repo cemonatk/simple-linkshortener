@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+{% block content %}
+    
+    {% if title  %}
+      <h1 class="text-danger">
+      {{ title }}
+      </h1>
+    {% else %}
+      <h1>Welcome to LinkShortener!</h1>
+    {% endif %}
+
+{% if not link %} 
+<legend class="border-bottom mb-4">Generate it now!</legend>
+<div class="form-group">
+{% if current_user.is_authenticated %}
+
+<form action="" method="POST">
+<label for="basic-url">Random link generation:</label>
+<input type="text" class="form-control" name="link1" id="link" type="url" placeholder="URIs must start with http:// or https://">
+<br><h4>Or</h4><br>
+<label for="basic-url">With special link (Maximum Character limit is 15):</label>
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="basic-addon3">https://linkshortener.domain/</span>
+  </div>
+  <input type="text" class="form-control" placeholder="YourSpecialLink" name="link2" id="basic-url" aria-describedby="basic-addon3">
+  &nbsp;<button class="btn btn-success" type="submit">Generate!</button>
+</div>
+</form>
+
+{% else %}
+
+<form action="" method="POST">
+<label for="basic-url">Random link generation:</label>
+<input type="text" class="form-control" name="link3" id="link" type="url" placeholder="URIs must start with http:// or https://">
+<br>
+<button class="btn btn-success" type="submit">Generate!</button>
+</form>
+<br>
+<label class="text-danger">You are not logged in, for a special link generation please <p class="font-weight-bold"><a class="text-danger" href="{{ url_for('users.login') }}">Login!</a></p></label>
+
+<div class="input-group-prepend"><br>
+  <div style="padding-right: 12px;">
+    <span>
+      <label>Example special link:</label>
+    </span>
+    <span class="input-group-text" id="basic-addon3">https://linkshortener.domain/YourSpecialLink</span>
+  </div>
+  <div>
+    <span>
+      <label>Example random link:</label>
+    </span>
+    <span class="input-group-text" id="basic-addon3">https://linkshortener.domain/l4c71d</span></div>
+  </div>
+
+{% endif %}
+</div>
+
+{% else %}
+<script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v2.0.0/dist/clipboard.min.js"></script>
+<script type="text/javascript">
+  new ClipboardJS('.btn btn-outline-success');
+</script>
+<legend class="border-bottom mb-4">Generated!</legend>
+
+<h5>Your shortened URL is: </h5><a id="link" href="{{ link }}"><p>{{ link }}</p></a>
+<button class="btn btn-outline-success" data-clipboard-action="copy" data-clipboard-target="p" type="submit">Copy to Clipboard</button>
+<a href="{{ url_for('main.links') }}"><button class="btn btn-outline-success" type="submit">Check All Links</button></a>
+<br><br>
+<div id="clipboarded" class="alert alert-success"></div>
+
+<script>
+    var pharagraph= document.getElementById("clipboarded");
+    pharagraph.style.visibility = "hidden";/*:D*/
+    var clipboard = new ClipboardJS('.btn');
+    clipboard.on('success', function(e) {
+        pharagraph.innerHTML = e.text+" is successfully copied to clipboard!";
+        pharagraph.style.visibility = "visible";
+    });
+    clipboard.on('error', function(e) {
+        console.log(e);
+    });
+    </script>
+{% endif %}
+{% endblock content %}
